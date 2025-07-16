@@ -29,7 +29,6 @@ public class PlayerInput : MonoBehaviour {
         }
         // 상하 이동 (W/S, ↑/↓)
         moveVertical = Input.GetAxis(moveVerticalAxisName);
-     //   Debug.Log("Vertical: " + moveVertical);
         // 좌우 이동 (A/D, ←/→)
         moveHorizontal = Input.GetAxis(moveHorizontalAxisName);
         fire = Input.GetButton(fireButtonName);

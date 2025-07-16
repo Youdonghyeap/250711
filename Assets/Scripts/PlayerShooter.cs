@@ -21,15 +21,15 @@ public class PlayerShooter : MonoBehaviour {
         // 슈터가 활성화될 때 총도 함께 활성화
         gun.gameObject.SetActive(true);
     }
-    
+
     private void OnDisable() {
         // 슈터가 비활성화될 때 총도 함께 비활성화
         gun.gameObject.SetActive(false);
     }
 
-    private void Update()
-    {
-        // 입력을 감지하고 총 발사하거나 재장전
+    private void Update() {
+        // fire: 마우스 누르고 있으면 true, 떼면 false
+        //playerAnimator.SetBool("Fire", playerInput.fire);
 
         if (playerInput.fire)
         {
@@ -42,7 +42,7 @@ public class PlayerShooter : MonoBehaviour {
                 playerAnimator.SetTrigger("Reload");
             }
         }
-        // UpdateUI();
+       // UpdateUI();
     }
 
     // 탄약 UI 갱신
@@ -55,6 +55,8 @@ public class PlayerShooter : MonoBehaviour {
     // }
 
     // 애니메이터의 IK 갱신
+    // Unity에서 IK Pass가 활성화된 레이어마다 자동으로 호출됨
+    // layerIndex: 현재 IK가 처리되는 애니메이터 레이어 인덱스 (0부터 시작)
     private void OnAnimatorIK(int layerIndex) {
         // 총의 기준점 gunPivot을 3D 모델의 오른쪽 팔꿈치 위치로 이동
         // 이렇게 하면 총이 캐릭터의 팔꿈치 움직임에 따라 자연스럽게 위치함
@@ -67,10 +69,8 @@ public class PlayerShooter : MonoBehaviour {
         playerAnimator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1.0f);
 
         // 왼손의 실제 위치와 회전을 총의 왼쪽 손잡이로 설정
-        playerAnimator.SetIKPosition(AvatarIKGoal.LeftHand,
-            leftHandMount.position);
-        playerAnimator.SetIKRotation(AvatarIKGoal.LeftHand,
-            leftHandMount.rotation);
+        playerAnimator.SetIKPosition(AvatarIKGoal.LeftHand,leftHandMount.position);
+        playerAnimator.SetIKRotation(AvatarIKGoal.LeftHand,leftHandMount.rotation);
 
         // 오른손 IK 설정: 총의 오른쪽 손잡이에 맞춤
         // Weight 1.0f = IK가 100% 적용됨
@@ -83,4 +83,5 @@ public class PlayerShooter : MonoBehaviour {
         playerAnimator.SetIKRotation(AvatarIKGoal.RightHand,
             rightHandMount.rotation);
     }
+    
 }

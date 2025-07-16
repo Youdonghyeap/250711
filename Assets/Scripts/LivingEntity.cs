@@ -10,7 +10,24 @@ public class LivingEntity : MonoBehaviour, IDamageable {
     public event Action onDeath; // 사망시 발동할 이벤트
 
     // 생명체가 활성화될때 상태를 리셋
-    protected virtual void OnEnable() {
+    //protected: 이 클래스와 상속받은 클래스에서만 접근 가능
+    //virtual: 자식 클래스에서 이 메서드를 "재정의(override)"할 수 있음
+    //OnEnable(): Unity의 생명주기 함수로, 오브젝트가 활성화될 때(Enable될 때) 자동 호출
+
+   /* public class MyEntity : LivingEntity {
+    public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal) {
+        // 부모의 OnDamage 기능도 같이 실행
+        base.OnDamage(damage, hitPoint, hitNormal);
+
+        // 자식만의 추가 동작
+        Debug.Log("추가 효과!");
+    }
+}
+override만 하면 부모 기능은 실행되지 않음(자식 코드만 실행)
+자식 코드에서 base.함수()를 호출하면 부모 기능도 함께 실행됨
+*/
+    protected virtual void OnEnable()
+    {
         // 사망하지 않은 상태로 시작
         dead = false;
         // 체력을 시작 체력으로 초기화
@@ -18,7 +35,8 @@ public class LivingEntity : MonoBehaviour, IDamageable {
     }
 
     // 데미지를 입는 기능
-    public virtual void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal) {
+    public virtual void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
+    {
         // 데미지만큼 체력 감소
         health -= damage;
 

@@ -29,15 +29,17 @@ public class ZombieSpawner : MonoBehaviour {
     }
 
     // 웨이브 정보를 UI로 표시
-    private void UpdateUI() {
+    private void UpdateUI()
+    {
         // 현재 웨이브와 남은 적 수 표시
-        // UIManager.instance.UpdateWaveText(wave, zombies.Count);
+        UIManager.instance.UpdateWaveText(wave, zombies.Count);
     }
 
     // 현재 웨이브에 맞춰 좀비들을 생성
     private void SpawnWave()
     {
         wave++;
+        UIManager.instance.ShowWaveText(wave);
 
         int spawnCount = Mathf.RoundToInt(wave * 1.5f);
 
@@ -58,6 +60,6 @@ public class ZombieSpawner : MonoBehaviour {
 
         zombie.onDeath += () => zombies.Remove(zombie);
         zombie.onDeath += () => Destroy(zombie.gameObject, 10f);
-        // zombie.onDeath += () => GameManager.instance.AddScore(100);
+        zombie.onDeath += () => GameManager.instance.AddScore(100);
     }
 }

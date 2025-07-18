@@ -3,6 +3,20 @@ using UnityEngine;
 
 // 좀비 게임 오브젝트를 주기적으로 생성
 public class ZombieSpawner : MonoBehaviour {
+    public static ZombieSpawner instance
+    {
+        get
+        {
+            if (m_instance == null)
+            {
+                m_instance = FindObjectOfType<ZombieSpawner>();
+            }
+
+            return m_instance;
+        }
+    }
+    private static ZombieSpawner m_instance;
+
     public Zombie zombiePrefab; // 생성할 좀비 원본 프리팹
 
     public ZombieData[] zombieDatas; // 사용할 좀비 셋업 데이터들
@@ -10,13 +24,17 @@ public class ZombieSpawner : MonoBehaviour {
 
     private List<Zombie> zombies = new List<Zombie>(); // 생성된 좀비들을 담는 리스트
     private int wave; // 현재 웨이브
+    public float waveTimeLimit = 60f;
+    public float waveTimer;
 
-    private void Update() {
+    private void Update()
+    {
         // 게임 오버 상태일때는 생성하지 않음
         if (GameManager.instance != null && GameManager.instance.isGameover)
         {
             return;
         }
+
 
         // 좀비를 모두 물리친 경우 다음 스폰 실행
         if (zombies.Count <= 0)
@@ -24,8 +42,17 @@ public class ZombieSpawner : MonoBehaviour {
             SpawnWave();
         }
 
+        waveTimer -= Time.deltaTime;
+        waveTimer = Mathf.Max(waveTimer, 0f);
+        UIManager.instance.ShowWaveTime();
+
+        if (zombies.Count > 0 && waveTimer <= 0)
+        {
+            GameManager.instance.EndGame();
+        }
+
         // UI 갱신
-        UpdateUI();
+            UpdateUI();
     }
 
     // 웨이브 정보를 UI로 표시
@@ -40,6 +67,7 @@ public class ZombieSpawner : MonoBehaviour {
     {
         wave++;
         UIManager.instance.ShowWaveText(wave);
+        waveTimer = waveTimeLimit;
 
         int spawnCount = Mathf.RoundToInt(wave * 1.5f);
 

@@ -26,6 +26,7 @@ public class UIManager : MonoBehaviour {
     public Text scoreText; // 점수 표시용 텍스트
     public Text waveText; // 적 웨이브 표시용 텍스트
     public TextMeshProUGUI sWaveText;
+    public TextMeshProUGUI waveTimeText;
     public GameObject gameoverUI; // 게임 오버시 활성화할 UI 
 
     void Start()
@@ -57,6 +58,13 @@ public class UIManager : MonoBehaviour {
         Sequence waveSequence = DOTween.Sequence();
 
         waveSequence.Append(sWaveText.DOFade(1f, 0.5f)).AppendInterval(0.5f).Append(sWaveText.DOFade(0f, 0.5f)).OnComplete(() => { sWaveText.text = ""; });
+    }
+
+    public void ShowWaveTime()
+    {
+        int minutes = Mathf.FloorToInt(ZombieSpawner.instance.waveTimer / 60);
+        int seconds = Mathf.FloorToInt(ZombieSpawner.instance.waveTimer % 60);
+        waveTimeText.text = $"TIME : {minutes:00} : {seconds:00}";
     }
 
     // 게임 오버 UI 활성화
